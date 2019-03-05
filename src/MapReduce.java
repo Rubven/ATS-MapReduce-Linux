@@ -6,27 +6,28 @@ import java.util.HashMap;
 
 public class MapReduce {
 
-    public static String textFilePath = "textFiles/";
+    public static String textFilePath = "../textFiles/";
 
     public static void main(String[] args) {
 
-        if(args.length > 0) {
-            String fileName = args[0];
+        String linea;
+        String[] splitLine;
 
-            //TODO
-            //Si hay más de un doc, hacer un foreach y llamar a su splitter y mapper
+        //Creamos HashMap
+        HashMap<String, Integer> palabras = new HashMap<String, Integer>();
+
+        if(args.length > 0) {
+            for (int i = 0; i < args.length; i++) {
+                String fileName = args[i];
+                //System.out.println(fileName);
 
             //Lectura fichero
             try {
                 BufferedReader input = new BufferedReader(new FileReader(textFilePath + fileName));
 
-                //Creamos HashMap
-                HashMap<String, Integer> palabras = new HashMap<String, Integer>();
-
                 //Split
                 try {
-                    String linea;
-                    String[] splitLine;
+                    
 
                     while ((linea=input.readLine()) != null) {
                         //Map
@@ -45,20 +46,25 @@ public class MapReduce {
 
                         //Metemos palabra en el HashMap o actualizamos
 
-                        for(int i=0; i < splitLine.length; i++){
-                            if (palabras.get(splitLine[i]) == null) {
-                                palabras.put(splitLine[i], 1);
+                        for(int j=0; j < splitLine.length; j++){
+                            if (palabras.get(splitLine[j]) == null) {
+                                palabras.put(splitLine[j], 1);
                             } else {
-                                palabras.put(splitLine[i], palabras.get(splitLine[i]) + 1);
+                                palabras.put(splitLine[j], palabras.get(splitLine[j]) + 1);
                             }
                         }
                     }
 
+
+
                     input.close();
 
-                    BufferedWriter writer = new BufferedWriter(new FileWriter(textFilePath+"Resultat"+fileName));
-
+                    BufferedWriter writer = new BufferedWriter(new FileWriter(textFilePath+"RES.txt"));
+                    
+                    System.out.println("Iteracio: " + i);
+                    System.out.println("-------------------------");
                     for (String k: palabras.keySet()) {
+                        System.out.println(k + " : " + palabras.get(k) + "\n");
                         writer.write(k + " : "+palabras.get(k)+"\n");
                     }
                     writer.close();
@@ -71,8 +77,9 @@ public class MapReduce {
             catch(Exception e){
                 System.out.println("Error Apertura Fichero");
             }
-
-
+            
         }
     }
+}
+
 }
