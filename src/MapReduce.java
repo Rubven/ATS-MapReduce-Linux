@@ -9,74 +9,66 @@ public class MapReduce {
     public static String textFilePath = "../textFiles/";
 
     public static void main(String[] args) {
-
-        String linea;
-        String[] splitLine;
-
-        //Creamos HashMap
-        HashMap<String, Integer> palabras = new HashMap<String, Integer>();
-
         if(args.length > 0) {
             for (int i = 0; i < args.length; i++) {
                 String fileName = args[i];
                 //System.out.println(fileName);
 
-            //Lectura fichero
-            try {
-                BufferedReader input = new BufferedReader(new FileReader(textFilePath + fileName));
-
-                //Split
+                //Lectura fichero
                 try {
-                    
+                    BufferedReader input = new BufferedReader(new FileReader(textFilePath + fileName));
 
-                    while ((linea=input.readLine()) != null) {
-                        //Map
-                        //Limpiamos linea
-                        linea = linea.toLowerCase();
-                        linea = linea.replaceAll("([^\\w\\s'-])","");
+                    //Creamos HashMap
+                    HashMap<String, Integer> palabras = new HashMap<String, Integer>();
 
-                        //Separamos palabras
-                        splitLine = linea.split(" ");
+                    //Split
+                    try {
 
-                        //while
+                        String linea;
+                        String[] splitLine;
 
-                        //TODO
-                        //Metemos solo la primera palabra de cada frase (hay que hacerlo recursivo)
-                        //No es capaz de sumar palabras iguales
+                        while ((linea=input.readLine()) != null) {
+                            //Map
+                            //Limpiamos linea
+                            linea = linea.toLowerCase();
+                            linea = linea.replaceAll("([^\\w\\s'-])","");
 
-                        //Metemos palabra en el HashMap o actualizamos
+                            //Separamos palabras
+                            splitLine = linea.split(" ");
 
-                        for(int j=0; j < splitLine.length; j++){
-                            if (palabras.get(splitLine[j]) == null) {
-                                palabras.put(splitLine[j], 1);
-                            } else {
-                                palabras.put(splitLine[j], palabras.get(splitLine[j]) + 1);
+                            //Metemos palabra en el HashMap o actualizamos
+
+                            for(int j=0; j < splitLine.length; j++){
+                                if (palabras.get(splitLine[j]) == null) {
+                                    palabras.put(splitLine[j], 1);
+                                } else {
+                                    palabras.put(splitLine[j], palabras.get(splitLine[j]) + 1);
+                                }
                             }
                         }
+
+
+
+                        input.close();
+
+                        BufferedWriter writer = new BufferedWriter(new FileWriter(textFilePath+"RES_"+i+"_"+fileName ));
+                        
+                        System.out.println("Iteracio: " + i);
+                        System.out.println("-------------------------");
+                        for (String k: palabras.keySet()) {
+                            System.out.println(k + " : " + palabras.get(k) + "\n");
+                            writer.write(k + " : "+palabras.get(k)+"\n");
+                        }
+                        writer.close();
+
                     }
-
-
-
-                    input.close();
-
-                    BufferedWriter writer = new BufferedWriter(new FileWriter(textFilePath+"RES.txt"));
-                    
-                    System.out.println("Iteracio: " + i);
-                    System.out.println("-------------------------");
-                    for (String k: palabras.keySet()) {
-                        System.out.println(k + " : " + palabras.get(k) + "\n");
-                        writer.write(k + " : "+palabras.get(k)+"\n");
+                    catch(Exception e){
+                        System.out.println("Error Lectura Fichero");
                     }
-                    writer.close();
-
                 }
                 catch(Exception e){
-                    System.out.println("Error Lectura Fichero");
+                    System.out.println("Error Apertura Fichero");
                 }
-            }
-            catch(Exception e){
-                System.out.println("Error Apertura Fichero");
-            }
             
         }
     }
