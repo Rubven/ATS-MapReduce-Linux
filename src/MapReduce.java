@@ -10,11 +10,9 @@ public class MapReduce {
 
     public static void main(String[] args) {
 
-        String linea;
-        String[] splitLine;
+        
 
-        //Creamos HashMap
-        HashMap<String, Integer> palabras = new HashMap<String, Integer>();
+        
 
         if(args.length > 0) {
             for (int i = 0; i < args.length; i++) {
@@ -25,9 +23,15 @@ public class MapReduce {
             try {
                 BufferedReader input = new BufferedReader(new FileReader(textFilePath + fileName));
 
+                //Creamos HashMap
+                HashMap<String, Integer> palabras = new HashMap<String, Integer>();
+
+
                 //Split
                 try {
-                    
+
+                    String linea;
+                    String[] splitLine;
 
                     while ((linea=input.readLine()) != null) {
                         //Map
@@ -37,12 +41,6 @@ public class MapReduce {
 
                         //Separamos palabras
                         splitLine = linea.split(" ");
-
-                        //while
-
-                        //TODO
-                        //Metemos solo la primera palabra de cada frase (hay que hacerlo recursivo)
-                        //No es capaz de sumar palabras iguales
 
                         //Metemos palabra en el HashMap o actualizamos
 
@@ -59,7 +57,7 @@ public class MapReduce {
 
                     input.close();
 
-                    BufferedWriter writer = new BufferedWriter(new FileWriter(textFilePath+"RES.txt"));
+                    BufferedWriter writer = new BufferedWriter(new FileWriter(textFilePath+"RES"+ fileName + ".txt"));
                     
                     System.out.println("Iteracio: " + i);
                     System.out.println("-------------------------");
