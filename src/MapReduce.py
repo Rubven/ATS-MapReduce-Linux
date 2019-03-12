@@ -22,7 +22,7 @@ def main():
 
         textfile = textfile.read()
         textfile = textfile.decode("UTF-8").encode(sys.stdin.encoding)
-        textfile = re.sub(r'^\W+|\W+$', '', textfile)
+        textfile = re.sub(r"([^\w\s'-[\n])", '', textfile)
         
         words = textfile.split(" ")
         
@@ -30,15 +30,26 @@ def main():
         """MAP"""
         for i in range(len(words)):
             words[i].lower()
-            dic.append([words[i]])
-            """SHUFFLE"""
-            for d in dic:
-                if words[i]  in d:
-                    d.append("1")
+            dic.append([words[i],1])
+        
+                
              
         dic.sort()
-        print dic
+        #print dic
         
+        
+        """SHUFFLE"""
+        dic2 = {}
+        for i in range(len(dic)):
+            if dic2.has_key(dic[i][0]):
+                dic2[dic[i][0]].append(dic[i])
+            else:
+                dic2[dic[i][0]] = dic[i]
+
+       
+        for (key, value) in dic2.items() :
+            print(str(key) + " :: " + str(value) )
+         
         
         """REDUCE"""
         previous = None
@@ -54,7 +65,7 @@ def main():
                 previous = key
                 sum =0
             sum = sum + int(value)
-        print previous + " : " + str(sum) 
+#        print previous + " : " + str(sum) 
     
     
 if __name__ == '__main__':
