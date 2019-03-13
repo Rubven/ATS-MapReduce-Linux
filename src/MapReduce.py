@@ -1,64 +1,57 @@
-#!/usr/bin/python
-# -*- coding: utf-8 -*-
 import sys
-import codecs
 import re
 
+def map(dic, words):
+    
+    #MAP
+    for i in range(len(words)):
+        dic.append([words[i].lower(),1])
+        
+    dic.sort()
+    return dic
+
+def shuffle(dicShuffle, dic):
+    #SHUFFLE
+
+    for i in range(len(dic)):
+        if dic[i][0] not in dicShuffle:
+            dicShuffle[dic[i][0]] = []
+        dicShuffle[dic[i][0]].append(dic[i][1])
+       
+    return dicShuffle
+    
+def reduce(dic):
+     #REDUCE
+
+     for word in dic:
+         dic[word] = sum(dic[word])
+     
 def main():
-    
-    print 'Number of arguments:', len(sys.argv), 'arguments.'
-    print 'Argument List:', str(sys.argv)
-    print
-    
+  
+    #Inicializamos variables
     path = "./textFiles/"
-    dic = []
-    words = []
     
+    words = []
+    dic = []
+   
+    dicShuffle = {}
     
     for i in range(1, len(sys.argv)):
         
-        textfile = open(path+sys.argv[i], "r")
-#        textfile = codecs.open(path+sys.argv[i], "r", "utf-8")
-
+         #Abrimos y leemos el fichero   
+        textfile = open(path+sys.argv[i], encoding="UTF-8")
         textfile = textfile.read()
-        textfile = textfile.decode("UTF-8").encode(sys.stdin.encoding)
-        textfile = re.sub(r'^\W+|\W+$', '', textfile)
-        
+     
+        #Separamos las palabras
+        textfile = re.sub("\n", ' ', textfile)
+        textfile = re.sub("([^\w\sà-úÀ-Ú'-])", '', textfile)
         words = textfile.split(" ")
         
-        
-        """MAP"""
-        for i in range(len(words)):
-            words[i].lower()
-            dic.append([words[i]])
-            """SHUFFLE"""
-            for d in dic:
-                if words[i]  in d:
-                    d.append("1")
-             
-        dic.sort()
-        print dic
-        
-        
-        """REDUCE"""
-        previous = None
-        sum = 0
-        value = ""
-        for i in range(len(dic)):
-            key= dic[i][0]
-            value = dic[i][1]
-            
-            if key != previous:
-                if previous is not None:
-                    print previous + " : " + str(sum) + '\t' 
-                previous = key
-                sum =0
-            sum = sum + int(value)
-        print previous + " : " + str(sum) 
-    
-    
+        dicmapped = map(dic, words)
+        dicShuffled = shuffle(dicShuffle, dicmapped)  
+        print(dicShuffled)
+        reduce(dicShuffled)
+       
+       
 if __name__ == '__main__':
     main()
-    
-    
-    
