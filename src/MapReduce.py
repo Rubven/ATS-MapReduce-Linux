@@ -17,39 +17,29 @@ def main():
      
         #Separamos las palabras
         textfile = re.sub("\n", ' ', textfile)
-        textfile = re.sub("([^\w\sà-úÀ-Ú'-])", '', textfile)
+        textfile = re.sub("([^\w\sà-úÀ-Ú'·-])", '', textfile)
         words = textfile.split(" ")
         
         
-        #MAP
-        for i in range(len(words)):
-            words[i].lower()
-            dic.append([words[i],1])
+        #MAP      
+        for word in words:
+            dic.append([word.lower(),1])
         dic.sort()
         
-               
+    
         #SHUFFLE
-        dic2 = {}
+        dicShuffle = {}
         for i in range(len(dic)):
-           if dic[i][0] in dic2:
-                dic2[dic[i][0]].append(dic[i])
-           else:
-                dic2[dic[i][0]] = dic[i]
-
+            if dic[i][0] not in dicShuffle:
+                dicShuffle[dic[i][0]] = []
+            dicShuffle[dic[i][0]].append(dic[i][1])
+      
+        
         #REDUCE
-        previous = None
-        sum = 0
-        value = ""
-        for i in range(len(dic)):
-            key= dic[i][0]
-            value = dic[i][1]
-            
-            if key != previous:
-                if previous is not None:
-                    print(previous + " : " + str(sum) + '\t')
-                previous = key
-                sum =0
-            sum = sum + int(value)
-       
+        for word in dicShuffle:
+            dicShuffle[word] = sum(dicShuffle[word])
+        
+        print(dicShuffle)
+        
 if __name__ == '__main__':
     main()
